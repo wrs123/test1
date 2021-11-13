@@ -10,6 +10,45 @@
         android:layout_height="match_parent"
         android:orientation="vertical"
         >
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="三角形的第一边：" />
+        <EditText
+            android:id="@+id/line1"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="三角形的第二边：" />
+        <EditText
+            android:id="@+id/line2"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="三角形的第三边：" />
+        <EditText
+            android:id="@+id/line3"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
 
+        <Button
+            android:id="@+id/doCal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="开始计算" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="计算结果：" />
+        <TextView
+            android:id="@+id/result"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            />
     </LinearLayout>
 </androidx.constraintlayout.widget.ConstraintLayout>
