@@ -2,6 +2,9 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.ofg.test1">
 
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
+
     <application
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
@@ -9,7 +12,7 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Test11Activity">
+        <activity android:name=".Test12Activity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -19,6 +22,7 @@
         <activity android:name=".DisplayValueActivity"></activity>
         <activity android:name=".GetValueActivity"></activity>
         <activity android:name=".MainActivity"></activity>
+        <activity android:name=".Test11Activity"></activity>
     </application>
 
 </manifest>
