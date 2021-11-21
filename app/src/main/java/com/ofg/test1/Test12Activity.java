@@ -7,15 +7,23 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.graphics.drawable.Drawable;
+import android.media.Image;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.CompoundButton;
+import android.widget.ImageButton;
 import android.widget.ListView;
 import android.widget.Switch;
 import android.widget.Toast;
+
+import androidx.annotation.RequiresApi;
+
+import com.ofg.test1.tools.BtUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -29,8 +37,8 @@ public class Test12Activity extends Activity {
     private Set<BluetoothDevice> pairedDevices;//声明的一个成员变量pairedDevices,它是一个set集合对象，可以放的是BluetoothDevice.由于集合是一种容器，相当于是一个瓶子，那么java提供了一种功能，就是在尖括号中声明这种容器是什么类型的容器，比如说是酒瓶，只能装酒。这是集合对象泛型的概念。
     private ListView lv1;
     private ListView lv2;
+//    private ImageButton refresh;
     private List<Map<String, String>> deviceList = new ArrayList<Map<String, String>>();
-    private Button searchB;
     Switch blueToothSwitch;
     Switch visibleSwitch;
     ArrayAdapter adapter1;
@@ -41,12 +49,13 @@ public class Test12Activity extends Activity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.test12);
 
-        searchB =(Button)findViewById(R.id.button5);
+//        refresh = (ImageButton) findViewById(R.id.refresh);
         lv1 =(ListView)findViewById(R.id.listView1);
         lv2 =(ListView)findViewById(R.id.listView2);
         BA =BluetoothAdapter.getDefaultAdapter();
         blueToothSwitch = (Switch) findViewById(R.id.BlueToothSwitch);
         visibleSwitch = (Switch) findViewById(R.id.VisibleSwitch);
+
 
         //广播注册
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
@@ -58,7 +67,7 @@ public class Test12Activity extends Activity {
         ArrayList list =new ArrayList();
         for(BluetoothDevice bt : pairedDevices)
             list.add(bt.getName());
-        adapter1 =new ArrayAdapter(Test12Activity.this,android.R.layout.simple_list_item_multiple_choice, list);
+        adapter1 =new ArrayAdapter(Test12Activity.this,android.R.layout.simple_expandable_list_item_1, list);
         lv1.setAdapter(adapter1);
 
         //第一次进入页面刷新可用设备列表
@@ -106,16 +115,15 @@ public class Test12Activity extends Activity {
             }
         });
 
-        //搜索按钮
-        searchB.setOnClickListener(new View.OnClickListener() {
-            public void onClick(View v){
-                BA.startDiscovery();
-            }
-        });
+
 
     }
 
-
+    //刷新按钮
+    public void searchDevice(View view){
+        deviceList.clear();
+        BA.startDiscovery();
+    };
 
     // Create a BroadcastReceiver for ACTION_FOUND.
     private final BroadcastReceiver receiver = new BroadcastReceiver() {
@@ -126,24 +134,27 @@ public class Test12Activity extends Activity {
 //            return result;
 //        }
 
+        @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR2)
         public void onReceive(Context context, Intent intent) {
             String action = intent.getAction();
             if (BluetoothDevice.ACTION_FOUND.equals(action)) {
                 // Discovery has found a device. Get the BluetoothDevice
                 // object and its info from the Intent.
                 BluetoothDevice device = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE);
-                Map<String, String> result = new HashMap<>();
+                if(device.getName() != null){
+                    Map<String, String> result = new HashMap<>();
 
-                result.put("name", device.getName());
-                result.put("address", device.getAddress());
-                deviceList.add(result);
-                runOnUiThread(new Runnable() {
-                    @Override
-                    public void run() {
-                        deviceListAdapter.notifyDataSetChanged();
-                    }
-                });
-
+                    result.put("name", device.getName());
+                    result.put("address", device.getAddress());
+                    result.put("icon", String.valueOf(BtUtils.getDeviceType(device.getBluetoothClass())));
+                    deviceList.add(result);
+                    runOnUiThread(new Runnable() {
+                        @Override
+                        public void run() {
+                            deviceListAdapter.notifyDataSetChanged();
+                        }
+                    });
+                }
             }
         }
     };

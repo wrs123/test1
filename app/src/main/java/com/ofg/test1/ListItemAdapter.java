@@ -1,6 +1,9 @@
 package com.ofg.test1;
 
 import android.content.Context;
+import android.content.Intent;
+import android.graphics.drawable.Drawable;
+import android.graphics.drawable.Icon;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,6 +29,7 @@ public class ListItemAdapter extends BaseAdapter {
     public class Info{
         public TextView name;
         public TextView address;
+        public Icon icon;
     }
 
     @Override
@@ -49,7 +53,12 @@ public class ListItemAdapter extends BaseAdapter {
         Info info = new Info();
         convertView = layoutInflater.inflate(R.layout.listviewitem, null);
         info.name = (TextView) convertView.findViewById(R.id.name);
+        int deviceTypeImg = Integer.valueOf(data.get(position).get("icon"));
+        Drawable drawable = context.getResources().getDrawable(deviceTypeImg);
+        drawable.setBounds(0, 0, drawable.getMinimumWidth(), drawable.getMinimumHeight());
         info.name.setText((String) data.get(position).get("name"));
+        info.name.setCompoundDrawables(drawable, null, null, null);
+
         return convertView;
     }
 }

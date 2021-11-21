@@ -5,20 +5,14 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-    <RelativeLayout
-
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-
         tools:context=".MainActivity">
         <ScrollView
             android:id="@+id/scrollView1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_alignParentBottom="true"
-            android:layout_alignParentLeft="true"
-            android:layout_alignParentRight="true"
-            android:layout_alignParentTop="true">
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content">
             <LinearLayout
                 android:layout_width="fill_parent"
                 android:layout_height="fill_parent"
@@ -27,50 +21,55 @@
                 <RelativeLayout
                     android:layout_width="fill_parent"
                     android:layout_height="wrap_content"
+                    android:layout_marginBottom="25dp"
                     >
                     <TextView
                         android:id="@+id/textView1"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="15dp"
                         android:gravity="left"
+                        android:textColor="@android:color/black"
                         android:text="@string/app_name"
-                        android:textSize="25dp"
+                        android:textSize="30dp"
                         />
 
                     <ImageButton
-                        android:id="@+id/imageButton"
-                        android:layout_width="wrap_content"
+
+                        android:layout_width="30dp"
                         android:layout_height="30dp"
-                        android:background="#ffffff"
                         android:gravity="right"
+                        android:padding="0dp"
+                        android:layout_margin="0dp"
+                        android:scaleType="fitCenter"
                         android:src="@drawable/ic_refresh"
-                        android:layout_centerVertical=""
+                        android:layout_centerVertical="true"
+                        android:layout_alignParentRight="true"
+                        android:clickable="true"
+                        android:background="@android:color/background_light"
+                        android:onClick="searchDevice"
                         />
                 </RelativeLayout>
                 <Switch
                     android:id="@+id/BlueToothSwitch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="20dp"
+                    android:textSize="16dp"
                     android:text="蓝牙开关"
                     />
                 <Switch
                     android:id="@+id/VisibleSwitch"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="30dp"
+                    android:textSize="16dp"
                     android:text="开放检测" />
-                <Button
-                    android:id="@+id/button5"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:onClick="search"
-                    android:text="search"/>
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:paddingBottom="10dp"
+                    android:textSize="13dp"
+                    android:background="@drawable/border"
                     android:text="已配对设备">
                 </TextView>
                 <ListView
@@ -83,17 +82,19 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginBottom="10dp"
+                    android:layout_marginTop="30dp"
+                    android:textSize="13dp"
                     android:text="可用设备">
                 </TextView>
                 <ListView
                     android:id="@+id/listView2"
                     android:layout_width="match_parent"
-                    android:layout_height="600dp"
+                    android:layout_height="400dp"
                     android:visibility="visible" >
                 </ListView>
             </LinearLayout>
         </ScrollView>
-    </RelativeLayout>
+    </LinearLayout>
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
