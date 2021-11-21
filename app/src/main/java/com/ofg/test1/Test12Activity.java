@@ -1,5 +1,6 @@
 package com.ofg.test1;
 
+import android.Manifest;
 import android.app.Activity;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
@@ -22,6 +23,8 @@ import android.widget.Switch;
 import android.widget.Toast;
 
 import androidx.annotation.RequiresApi;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
 import com.ofg.test1.tools.BtUtils;
 
@@ -30,6 +33,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
+import static android.content.pm.PackageManager.PERMISSION_GRANTED;
 
 public class Test12Activity extends Activity {
 
@@ -41,7 +46,7 @@ public class Test12Activity extends Activity {
     private List<Map<String, String>> deviceList = new ArrayList<Map<String, String>>();
     Switch blueToothSwitch;
     Switch visibleSwitch;
-    ArrayAdapter adapter1;
+    ListItemAdapter adapter1;
     ListItemAdapter deviceListAdapter;
 
     @Override
@@ -56,6 +61,8 @@ public class Test12Activity extends Activity {
         blueToothSwitch = (Switch) findViewById(R.id.BlueToothSwitch);
         visibleSwitch = (Switch) findViewById(R.id.VisibleSwitch);
 
+        ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION},1);
+
 
         //广播注册
         IntentFilter filter = new IntentFilter(BluetoothDevice.ACTION_FOUND);
@@ -65,15 +72,28 @@ public class Test12Activity extends Activity {
         //已配对设备列表
         pairedDevices = BA.getBondedDevices();
         ArrayList list =new ArrayList();
-        for(BluetoothDevice bt : pairedDevices)
-            list.add(bt.getName());
-        adapter1 =new ArrayAdapter(Test12Activity.this,android.R.layout.simple_expandable_list_item_1, list);
+        for(BluetoothDevice bt : pairedDevices){
+            Map<String, String> result = new HashMap<>();
+
+            result.put("name", bt.getName());
+            result.put("address", bt.getAddress());
+            result.put("icon", String.valueOf(BtUtils.getDeviceType(bt.getBluetoothClass())));
+            list.add(result);
+        }
+        adapter1 =new ListItemAdapter(Test12Activity.this, list);
         lv1.setAdapter(adapter1);
+
+        initPermission();
 
         //第一次进入页面刷新可用设备列表
         BA.startDiscovery();
         deviceListAdapter = new ListItemAdapter(Test12Activity.this, deviceList);
         lv2.setAdapter(deviceListAdapter);
+
+        //如果返回true表示缺少权限
+
+
+
 
 
         //初始化蓝牙开关状态
@@ -118,6 +138,28 @@ public class Test12Activity extends Activity {
 
 
     }
+
+    private void initPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PERMISSION_GRANTED) {
+                // 检查权限状态
+                if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
+                    /**
+                     * 用户彻底拒绝授予权限，一般会提示用户进入设置权限界面
+                     * 第一次授权失败之后，退出App再次进入时，再此处重新调出允许权限提示框
+                     */
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                } else {
+                    /**
+                     * 用户未彻底拒绝授予权限
+                     * 第一次安装时，调出的允许权限提示框，之后再也不提示
+                     */
+                    ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
+                }
+            }
+        }
+    }
+
 
     //刷新按钮
     public void searchDevice(View view){
